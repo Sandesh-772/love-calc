@@ -344,6 +344,15 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
+        // Check if a name includes Prasuna Paudel variants
+        function isPrasuna(name) {
+            const lowerName = name.toLowerCase();
+            return lowerName === 'prasuna' || 
+                   lowerName === 'prausna' || 
+                   lowerName.includes('prasuna paudel') || 
+                   lowerName.includes('prausna paudel');
+        }
+
         // Love calculation logic
         document.getElementById('calculate').addEventListener('click', () => {
             const name1 = document.getElementById('name1').value.trim();
@@ -383,41 +392,79 @@
                 return;
             }
             
-            // Special case for Sandesh
-            if (name1Lower === 'sandesh' || name2Lower === 'sandesh') {
-                const otherName = name1Lower === 'sandesh' ? name2Lower : name1Lower;
+            // Special case for Sandesh with Prasuna
+            if ((name1Lower === 'sandesh' || name1Lower === 'sandesh jamkattel') && isPrasuna(name2)) {
+                // Great match for Sandesh and Prasuna
+                heart.visible = true;
+                heart.scale.set(0.1, 0.1, 0.1);
+                heart.userData.compatibility = 100;
+                heartScale = 0.1;
+                animateHeartGrow = true;
+                animationComplete = false;
                 
-                if (otherName.startsWith('prausna paudel')) {
-                    // Great match for Sandesh and Prausna
-                    heart.visible = true;
-                    heart.scale.set(0.1, 0.1, 0.1);
-                    heart.userData.compatibility = 100;
-                    heartScale = 0.1;
-                    animateHeartGrow = true;
-                    animationComplete = false;
-                    
-                    // Add special effects for high compatibility
-                    particleSystem = createParticles(500, 0xff77ff);
-                    particleSystem.position.copy(heart.position);
-                    scene.add(particleSystem);
-                    
-                    heart.material.color.set(0xff0066);
-                    heart.material.emissive.set(0x660033);
-                    
-                    document.getElementById('compatibility').textContent = '100%';
-                    document.getElementById('message').innerHTML = "Perfect match! Sandesh only has chemistry with Prausna Paudel!";
-                } else {
-                    // No match for Sandesh with anyone else
-                    brokenHeartLeft.visible = true;
-                    brokenHeartRight.visible = true;
-                    brokenHeartLeft.position.x = -0.5;
-                    brokenHeartRight.position.x = 0.5;
-                    brokenHeartOffsetX = 0;
-                    animateBrokenHeart = true;
-                    
-                    document.getElementById('compatibility').textContent = '0%';
-                    document.getElementById('message').innerHTML = "Sandesh only has chemistry with a girl named Prausna Paudel.";
-                }
+                // Add special effects for high compatibility
+                particleSystem = createParticles(500, 0xff77ff);
+                particleSystem.position.copy(heart.position);
+                scene.add(particleSystem);
+                
+                heart.material.color.set(0xff0066);
+                heart.material.emissive.set(0x660033);
+                
+                document.getElementById('compatibility').textContent = '100%';
+                document.getElementById('message').innerHTML = "Perfect match! The perfect soulmates are meant to be together!";
+                return;
+            }
+            
+            // Special case for Prasuna with Sandesh
+            if (isPrasuna(name1) && (name2Lower === 'sandesh' || name2Lower === 'sandesh jamkattel')) {
+                // Great match for Prasuna and Sandesh
+                heart.visible = true;
+                heart.scale.set(0.1, 0.1, 0.1);
+                heart.userData.compatibility = 100;
+                heartScale = 0.1;
+                animateHeartGrow = true;
+                animationComplete = false;
+                
+                // Add special effects for high compatibility
+                particleSystem = createParticles(500, 0xff77ff);
+                particleSystem.position.copy(heart.position);
+                scene.add(particleSystem);
+                
+                heart.material.color.set(0xff0066);
+                heart.material.emissive.set(0x660033);
+                
+                document.getElementById('compatibility').textContent = '100%';
+                document.getElementById('message').innerHTML = "Perfect match! The perfect soulmates are meant to be together!";
+                return;
+            }
+            
+            // Special case for Sandesh with anyone else
+            if (name1Lower === 'sandesh' || name1Lower === 'sandesh jamkattel' || name2Lower === 'sandesh' || name2Lower === 'sandesh jamkattel') {
+                // No match for Sandesh with anyone else
+                brokenHeartLeft.visible = true;
+                brokenHeartRight.visible = true;
+                brokenHeartLeft.position.x = -0.5;
+                brokenHeartRight.position.x = 0.5;
+                brokenHeartOffsetX = 0;
+                animateBrokenHeart = true;
+                
+                document.getElementById('compatibility').textContent = '0%';
+                document.getElementById('message').innerHTML = "Sandesh is only compatible with Prasuna Paudel.";
+                return;
+            }
+            
+            // Special case for Prasuna with anyone else
+            if (isPrasuna(name1) || isPrasuna(name2)) {
+                // No match for Prasuna with anyone else
+                brokenHeartLeft.visible = true;
+                brokenHeartRight.visible = true;
+                brokenHeartLeft.position.x = -0.5;
+                brokenHeartRight.position.x = 0.5;
+                brokenHeartOffsetX = 0;
+                animateBrokenHeart = true;
+                
+                document.getElementById('compatibility').textContent = '0%';
+                document.getElementById('message').innerHTML = "Prasuna Paudel is only compatible with Sandesh Jamkattel.";
                 return;
             }
             
